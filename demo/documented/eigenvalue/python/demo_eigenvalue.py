@@ -41,22 +41,27 @@ if not has_slepc():
     exit()
 
 # Define mesh, function space
-mesh = Mesh("../box_with_dent.xml.gz")
+mesh = Mesh("box_with_dent.xml.gz")
 V = FunctionSpace(mesh, "Lagrange", 1)
 
 # Define basis and bilinear form
 u = TrialFunction(V)
 v = TestFunction(V)
 a = dot(grad(u), grad(v))*dx
+m = u*v*dx
 
 # Assemble stiffness form
 A = PETScMatrix()
 assemble(a, tensor=A)
 
-# Create eigensolver
-eigensolver = SLEPcEigenSolver(A)
+# Assemble mass matrix
+M = PETScMatrix()
+assemble(m, tensor=M)
 
-# Compute all eigenvalues of A x = \lambda x
+# Create eigensolver
+eigensolver = SLEPcEigenSolver(A, M)
+
+# Compute all eigenvalues of A x = \lambda M x
 print("Computing eigenvalues. This can take a minute.")
 eigensolver.solve()
 
