@@ -25,6 +25,7 @@
 
 #include <dolfin.h>
 #include "StiffnessMatrix.h"
+#include "MassMatrix.h"
 
 using namespace dolfin;
 
@@ -41,7 +42,7 @@ int main()
   auto V = std::make_shared<StiffnessMatrix::FunctionSpace>(mesh);
   StiffnessMatrix::BilinearForm a(V, V);
   assemble(*A, a);
-  MassMatrix::BilinearForm a(V, V);
+  MassMatrix::BilinearForm m(V, V);
   assemble(*M, m);
 
   // Create eigensolver

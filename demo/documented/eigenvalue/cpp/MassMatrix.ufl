@@ -16,13 +16,13 @@
 # along with DOLFIN. If not, see <http://www.gnu.org/licenses/>.
 #
 # First added:  2005-06-05
-# Last changed: 2010-09-05
+# Last changed: 2016-02-08
 #
-# The bilinear form for a stiffness matrix (Poisson).
+# The bilinear form for a mass matrix.
 
 element = FiniteElement("Lagrange", tetrahedron, 1)
 
 v = TestFunction(element)
 u = TrialFunction(element)
 
-a = dot(grad(v), grad(u))*dx
+m = dot(v, u)*dx
