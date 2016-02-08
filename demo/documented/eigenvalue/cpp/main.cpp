@@ -37,14 +37,17 @@ int main()
 
   // Build stiffness matrix
   auto A = std::make_shared<PETScMatrix>();
+  auto M = std::make_shared<PETScMatrix>();
   auto V = std::make_shared<StiffnessMatrix::FunctionSpace>(mesh);
   StiffnessMatrix::BilinearForm a(V, V);
   assemble(*A, a);
+  MassMatrix::BilinearForm a(V, V);
+  assemble(*M, m);
 
   // Create eigensolver
-  SLEPcEigenSolver esolver(A);
+  SLEPcEigenSolver esolver(A, M);
 
-  // Compute all eigenvalues of A x = \lambda x
+  // Compute all eigenvalues of A x = \lambda M x
   esolver.solve();
 
   // Extract largest (first, n =0) eigenpair
